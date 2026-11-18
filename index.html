@@ -1,28 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="mr">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Smart Talk</title>
 <style>
-body{font-family:Arial;text-align:center;padding:40px;background:#f0f2ff}
-.box{background:white;padding:30px;border-radius:15px;max-width:500px;margin:auto;box-shadow:0 5px 20px #ccc}
-button{padding:12px 25px;background:#6c5ce7;color:white;border:none;border-radius:10px;font-size:18px}
-input{padding:12px;width:80%;border-radius:10px;border:1px solid #ccc;margin:10px}
+body{font-family:sans-serif;background:#0f172a;color:white;text-align:center;padding:20px}
+.box{background:white;color:black;border-radius:20px;padding:20px;max-width:500px;margin:auto}
+input{width:90%;padding:12px;border-radius:10px;border:1px solid #ccc;font-size:16px}
+button{padding:12px 18px;margin:8px 4px;border:none;border-radius:10px;font-size:16px}
+.ask{background:#2563eb;color:white}
+.mic{background:#f59e0b;color:white;font-size:20px}
+#answer{margin-top:15px;background:#f1f5f9;padding:15px;border-radius:12px;min-height:60px;text-align:left;font-size:17px}
 </style>
 </head>
 <body>
+<h1>🎙️ AI Smart Talk</h1>
+<p>बोलून किंवा लिहून प्रश्न विचारा</p>
 <div class="box">
-<h1>🤖 AI Smart Talk</h1>
-<p>तुझ्या प्रश्नाचं स्मार्ट उत्तर मिळव!</p>
-<input id="q" placeholder="तुझा प्रश्न लिह...">
+<input id="q" placeholder="उदा: महाराष्ट्राची राजधानी कोणती?" />
 <br>
-<button onclick="ask()">Ask AI</button>
-<p id="ans"></p>
+<button class="ask" onclick="askAI()">Ask AI ✨</button>
+<button class="mic" onclick="startVoice()">🎤 बोला</button>
+<div id="answer">नमस्कार! मी तुमचा AI मित्र आहे. काहीही विचारा.</div>
 </div>
 <script>
-function ask(){
-let q=document.getElementById("q").value;
-document.getElementById("ans").innerText = "तुझा प्रश्न: " + q + " - AI लवकरच उत्तर देईल!";
+const knowledge=[
+{k:["महाराष्ट्राची राजधानी","maharashtra","capital of maharashtra"],a:"महाराष्ट्राची राजधानी मुंबई आहे."},
+{k:["भारताची राजधानी","bharat","capital of india"],a:"भारताची राजधानी नवी दिल्ली आहे."},
+{k:["तुझे नाव","tuze nav","your name"],a:"माझे नाव AI Smart Talk आहे. मला राकेशने बनवले आहे."},
+{k:["कसा आहेस","kasa ahes","how are you"],a:"मी एकदम मस्त आहे! तुम्ही कसे आहात?"},
+{k:["पुणे","pune"],a:"पुणे हे महाराष्ट्रातील सुंदर शहर आहे, त्याला सांस्कृतिक राजधानी म्हणतात."},
+{k:["शिवाजी","shivaji"],a:"छत्रपती शिवाजी महाराज हे मराठा साम्राज्याचे संस्थापक होते."},
+{k:["सूर्य","surya","sun"],a:"सूर्य हा सौरमालेचा केंद्रबिंदू आहे."},
+{k:["पाणी","pani","water"],a:"पाण्याचे सूत्र H2O आहे. पाणी हेच जीवन आहे."},
+{k:["नमस्कार","namaskar","hello","hi"],a:"नमस्कार! 🙏 तुम्हाला काय विचारायचे आहे?"},
+{k:["धन्यवाद","dhanyavad","thank"],a:"तुमचे स्वागत आहे! अजून काही विचारायचे आहे का?"},
+{k:["कोण बनवलं","kon banavla","who made"],a:"मला राकेशने बनवले आहे."}
+];
+function speak(t){let u=new SpeechSynthesisUtterance(t);u.lang='mr-IN';speechSynthesis.speak(u)}
+function askAI(){
+let q=document.getElementById('q').value.toLowerCase().trim();
+if(!q){document.getElementById('answer').innerText="कृपया आधी प्रश्न लिहा किंवा बोला.";return}
+let found="माफ करा, मला याचे उत्तर अजून माहित नाही. दुसरा प्रश्न विचारा.";
+for(let item of knowledge){for(let key of item.k){if(q.includes(key)){found=item.a;break}} if(found!="माफ करा, मला याचे उत्तर अजून माहित नाही. दुसरा प्रश्न विचारा.") break}
+document.getElementById('answer').innerHTML="<b>तुमचा प्रश्न:</b> "+q+"<br><br><b>AI उत्तर:</b> "+found;
+speak(found);
+}
+function startVoice(){
+let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){alert("तुमच्या फोनमध्ये Voice सपोर्ट नाही.");return}
+let rec=new SR();rec.lang='mr-IN';
+document.getElementById('answer').innerText="🎤 ऐकतोय... बोला...";
+rec.onresult=function(e){let text=e.results[0][0].transcript;document.getElementById('q').value=text;askAI()};
+rec.start();
 }
 </script>
 </body>
