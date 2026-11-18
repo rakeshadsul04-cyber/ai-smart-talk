@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Smart Talk</title>
+<style>
+body{font-family:Arial;text-align:center;padding:40px;background:#f0f2ff}
+.box{background:white;padding:30px;border-radius:15px;max-width:500px;margin:auto;box-shadow:0 5px 20px #ccc}
+button{padding:12px 25px;background:#6c5ce7;color:white;border:none;border-radius:10px;font-size:18px}
+input{padding:12px;width:80%;border-radius:10px;border:1px solid #ccc;margin:10px}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🤖 AI Smart Talk</h1>
+<p>तुझ्या प्रश्नाचं स्मार्ट उत्तर मिळव!</p>
+<input id="q" placeholder="तुझा प्रश्न लिह...">
+<br>
+<button onclick="ask()">Ask AI</button>
+<p id="ans"></p>
+</div>
+<script>
+function ask(){
+let q=document.getElementById("q").value;
+document.getElementById("ans").innerText = "तुझा प्रश्न: " + q + " - AI लवकरच उत्तर देईल!";
+}
+</script>
+</body>
+</html>
